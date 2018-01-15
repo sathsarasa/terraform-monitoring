@@ -27,7 +27,7 @@ resource "aws_instance" "monitoring1" {
 resource "aws_security_group" "monitoring_sg" {
 	name = "Monitoring-SG"
 	description = "Used as the security group for monitoring servers"
-	vpc_id = "$(var.vpc)"
+	vpc_id = "${var.vpc}"
 	
 	# SSH 
 	ingress {
