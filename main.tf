@@ -6,27 +6,57 @@ provider "aws" {
 
 
 
+
 ## Create EC2 Instances
 
-resource "aws_instance" "monitoring1" {
-	instance_type = "${var.instance_type}"
+resource "aws_instance" "bastion" {
+	instance_type = "${var.bastion_instance_type}"
 	ami = "${var.instance_ami}"
 	tags {
-		Name = "Monitoring-01"
+		Name = "${var.project_name}-Bastion-01"
+	}
+
+	key_name = "${var.bastion_key_pair_name}"
+	vpc_security_group_ids = ["${aws_security_group.bastion_sg.id}"]
+	subnet_id = "${var.subnet_1}"
+#	disable_api_termination = "true"
+}
+
+resource "aws_instance" "monitoring1" {
+	instance_type = "${var.monitoring_instance_type}"
+	ami = "${var.instance_ami}"
+	tags {
+		Name = "${var.project_name}-Monitoring-01"
 	}
 
 	key_name = "${var.key_pair_name}"
 	vpc_security_group_ids = ["${aws_security_group.monitoring_sg.id}"]
-	subnet_id = "${var.subnet}"
-	disable_api_termination = "true"
+	subnet_id = "${var.subnet_1}"
+#	disable_api_termination = "true"
 }	
 
 
 ## Create Security Group
 
+resource "aws_security_group" "bastion_sg" {
+	name = "${var.project_name}-Bastion-SG"
+	description = "Security group for Baston server"
+	vpc_id = "${var.vpc}"
+	
+	#SSH 
+	ingress {
+		from_port = 22
+		to_port = 22
+		protocol = "tcp"
+		cidr_blocks = ["0.0.0.0/0"]
+		description = "SSH"
+	}
+}
+
+
 resource "aws_security_group" "monitoring_sg" {
-	name = "Monitoring-SG"
-	description = "Used as the security group for monitoring servers"
+	name = "${var.project_name}-Monitoring-SG"
+	description = "Security group for monitoring servers"
 	vpc_id = "${var.vpc}"
 	
 	# SSH 
@@ -34,7 +64,7 @@ resource "aws_security_group" "monitoring_sg" {
 		from_port 	= 22
 		to_port		= 22
 		protocol	= "tcp"
-		cidr_blocks = ["0.0.0.0/0"]
+		cidr_blocks = "${aws_security_group.bastion_sg.id}"
 	}
 	
 	# HTTP for Nagios
