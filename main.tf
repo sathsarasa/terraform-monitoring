@@ -1,7 +1,7 @@
 provider "aws" {
-	access_key = "${var.access_key}"
-	secret_key = "${var.secret_key}"
-	region     = "${var.region}"
+	access_key 		= "${var.access_key}"
+	secret_key 		= "${var.secret_key}"
+	region     		= "${var.region}"
 }
 
 
@@ -64,7 +64,7 @@ resource "aws_security_group" "monitoring_sg" {
 		from_port 	= 22
 		to_port		= 22
 		protocol	= "tcp"
-		cidr_blocks = ["${aws_security_group.bastion_sg.id}"]
+		security_groups = ["${aws_security_group.bastion_sg.id}"]
 	}
 	
 	# HTTP for Nagios
