@@ -18,7 +18,7 @@ variable "subnet_1" {
 	default = "subnet-1396ed5a"
 }
 
-variable "subnet_1" {
+variable "subnet_2" {
 	default = "subnet-cfa42994"
 }
 
@@ -30,7 +30,11 @@ variable "key_pair_name" {
 	default = "sathsara-k8s"
 }
 
-variable "instance_type" {
+variable "bastion_instance_type" {
+	default = "t2.micro"
+}
+
+variable "monitoring_instance_type" {
 	default = "t2.micro"
 }
 
