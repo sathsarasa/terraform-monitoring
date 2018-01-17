@@ -1,7 +1,7 @@
 
 ## Create EC2 Instances
 
-resource "aws_instance" "bastion" {
+resource "aws_instance" "nginx" {
 	instance_type = "${var.nginx_instance_type}"
 	ami = "${var.instance_ami}"
 	tags {
