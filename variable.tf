@@ -38,6 +38,10 @@ variable "monitoring_instance_type" {
 	default = "t2.micro"
 }
 
+variable "nginx_instance_type" {
+	default = "t2.micro"
+}
+
 variable "instance_ami" {
 	default = "ami-41e0b93b"
 }
